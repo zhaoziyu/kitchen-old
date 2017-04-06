@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>kitchen-rpc</artifactId>
+        <groupId>com.restaurant.dinner</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>kitchen-rpc-client</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+
+        <!-- 模块依赖 -->
+        <dependency>
+            <groupId>com.restaurant.dinner</groupId>
+            <artifactId>kitchen-rpc-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.restaurant.dinner</groupId>
+            <artifactId>kitchen-rpc-registry</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- JavaEE 配置 - Start -->
+        <dependency><!-- JavaEE -->
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${javaee-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency><!-- Servlet -->
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${javax-servlet-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- JavaEE 配置 - End -->
+
+    </dependencies>
+
+
+</project>

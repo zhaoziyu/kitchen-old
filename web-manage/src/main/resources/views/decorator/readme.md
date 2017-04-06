@@ -1,0 +1,1 @@
+页面装饰器（使用sitemesh和<#include "*.ftl">制作母版页）

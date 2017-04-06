@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+	<!--
+	默认情况下，sitemesh 只对 HTTP 响应头中 Content-Type 为 text/html 的类型进行拦截和装饰，我们可以添加更多的 mime 类型
+	<mime-type>text/html</mime-type>
+	<mime-type>application/vnd.wap.xhtml+xml</mime-type>
+	<mime-type>application/xhtml+xml</mime-type>
+
+	默认装饰器，当下面的路径都不匹配时，启用该装饰器进行装饰
+	<mapping decorator="/default-decorator.html"/>
+
+	对不同的路径，启用不同的装饰器
+	<mapping path="/admin/*" decorator="/another-decorator.html"/>
+	<mapping path="/*.special.jsp" decorator="/special-decorator.html"/>
+
+	对同一路径，启用多个装饰器
+	<mapping>
+		<path>/articles/*</path>
+		<decorator>/tpl/article.html</decorator>
+		<decorator>/tpl/two-page-layout.html</decorator>
+		<decorator>/tpl/common.html</decorator>
+	</mapping>
+
+	排除，不进行装饰的路径
+	<mapping path="/javadoc/*" exclue="true"/>
+	<mapping path="/brochures/*" exclue="true"/>
+
+	自定义 tag 规则
+	<content-processor>
+		<tag-rule-bundle class="com.something.CssCompressingBundle" />
+		<tag-rule-bundle class="com.something.LinkRewritingBundle"/>
+	</content-processor>
+	-->
+
+    <!--默认装饰器，当下面的路径都不匹配时，启用该装饰器进行装饰-->
+    <mapping decorator="/decorator/default.ftl"/>
+
+    <!-- 演示用 -->
+    <mapping path="/demo/demo1" decorator="/decorator/common-boostrap.ftl"/>
+    <mapping path="/demo/demo2" decorator="/decorator/common-vue.ftl"/>
+
+
+    <mapping path="/" decorator="/decorator/main/main_tpl.ftl"/>
+	<mapping path="/*" decorator="/decorator/common-boostrap.ftl"/>
+
+	<!-- 排除无需SiteMesh过滤的地址 -->
+	<mapping path="/login" exclue="true"/>
+
+    <!-- 策略：html页面不使用Sitemesh进行装饰，可以使用前端装饰/模板框架 -->
+    <mapping path="*.html" exclue="true"/>
+
+</sitemesh>

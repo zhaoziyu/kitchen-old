@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>com.restaurant.dinner</groupId>
+    <artifactId>kitchen</artifactId>
+    <packaging>pom</packaging>
+
+    <modelVersion>4.0.0</modelVersion>
+    <version>1.0.0-SNAPSHOT</version>
+
+    <modules>
+        <module>core-interface</module>
+        <module>core-market</module>
+        <module>core-business</module>
+        <module>api-portal</module>
+        <module>api-provider</module>
+        <module>web-manage</module>
+        <module>web-business</module>
+        <module>kitchen-cache</module>
+        <module>kitchen-rpc</module>
+    </modules>
+
+    <!-- 通用属性配置 -->
+    <properties>
+        <!-- 默认 JDK 版本 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
+
+        <!-- spring 版本号 -->
+        <spring.version>4.3.2.RELEASE</spring.version>
+        <!-- mybatis 版本号 -->
+        <mybatis.version>3.4.2</mybatis.version>
+
+        <!-- javaee相关版本 -->
+        <javaee-api.version>7.0</javaee-api.version>
+        <javax-servlet-api.version>3.1.0</javax-servlet-api.version>
+
+        <!-- FastJson版本 -->
+        <fastjson.version>1.2.17</fastjson.version>
+    </properties>
+
+    <dependencies>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++通用工具+++++++++++++++++++++++++++++++++++++++++++++++ -->
+        <!--
+            Java元组支持 http://www.javatuples.org/
+
+            Pair<String, Integer> func(String input) {
+                // something...
+                return Pair.with(stringResult, intResult);
+            }
+        -->
+        <dependency>
+            <groupId>org.javatuples</groupId>
+            <artifactId>javatuples</artifactId>
+            <version>1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.2.1</version>
+        </dependency>
+        <!-- +++++++++++++++++++++++++++++++++++++++++++++++通用工具+++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+        <!-- Spring 配置 - Start -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- Spring 配置 - End -->
+
+        <!-- SLF4J -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+
+        <!-- 阿里巴巴 FastJson 框架 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson.version}</version>
+        </dependency>
+
+        <!-- JUnit 测试 只在开发时引入，发布的时候不会加载 -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

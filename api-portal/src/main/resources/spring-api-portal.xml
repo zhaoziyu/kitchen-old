@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!--
+    配置Web层组件
+    1、Controller：处理器/页面控制器，做的是MVC中的C的事情，但控制逻辑转移到前端控制器了，用于对请求进行处理；
+    2、HandlerMapping：请求到处理器的映射，如果映射成功返回一个HandlerExecutionChain对象（包含一个Handler处理器（页面控制器）对象、多个HandlerInterceptor拦截器）对象；如BeanNameUrlHandlerMapping将URL与Bean名字映射，映射成功的Bean就是此处的处理器；
+    3、HandlerAdapter：HandlerAdapter将会把处理器包装为适配器，从而支持多种类型的处理器，即适配器设计模式的应用，从而很容易支持很多类型的处理器；如SimpleControllerHandlerAdapter将对实现了Controller接口的Bean进行适配，并且掉处理器的handleRequest方法进行功能处理；
+    4、ViewResolver：ViewResolver将把逻辑视图名解析为具体的View，通过这种策略模式，很容易更换其他视图技术；如InternalResourceViewResolver将逻辑视图名映射为jsp视图；
+    5、LocalResover：本地化解析，因为Spring支持国际化，因此LocalResover解析客户端的Locale信息从而方便进行国际化；
+    6、ThemeResovler：主题解析，通过它来实现一个页面多套风格，即常见的类似于软件皮肤效果；
+    7、MultipartResolver：文件上传解析，用于支持文件上传；
+    8、HandlerExceptionResolver：处理器异常解析，可以将异常映射到相应的统一错误界面，从而显示用户友好的界面（而不是给用户看到具体的错误信息）；
+    9、RequestToViewNameTranslator：当处理器没有返回逻辑视图名等相关信息时，自动将请求URL映射为逻辑视图名；
+    10、FlashMapManager：用于管理FlashMap的策略接口，FlashMap用于存储一个请求的输出，当进入另一个请求时作为该请求的输入，通常用于重定向场景，后边会细述。
+    -->
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:properties/global-config.properties</value>
+                <value>classpath:properties/rpc-consumers.properties</value>
+
+                <!-- 导入core-business模块配置 -->
+                <value>classpath*:conf/properties/db-config.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+    支持跨域访问（允许全部外部访问请求）
+    生产环境下，至少在mapping中添加allowed-origins和max-age
+    allowed-origins：允许跨域访问的IP或域名，多个IP或域名之间用逗号隔开，设置为空则不允许任何跨域的访问
+    max-age：OPTIONS请求的缓存时间，如果不设置或设置为0，则每次跨域的请求都会先发起一个OPTIONS请求，再发起真实请求
+    更多内容可参考“关于跨域访问.md”中的说明
+    -->
+    <mvc:cors>
+        <!--指定白名单和缓存时间（秒）-->
+        <!--<mvc:mapping path="/**" allowed-origins="http://127.0.0.1:8088,http://localhost:8088" max-age="3600" />-->
+        <!--全部可访问-->
+        <mvc:mapping path="/**" allowed-origins="http://127.0.0.1:8088,http://localhost:8088" max-age="3600" />
+    </mvc:cors>
+
+    <!-- 导入 RPC Client 模块配置  -->
+    <import resource="spring-rpc-consumer.xml" />
+
+    <!-- 导入core-business模块Spring配置文件 在propertyConfigurer中需要导入db-config.properties -->
+    <import resource="classpath*:conf/spring-core-business.xml" />
+
+    <!-- 自动扫描注解的Bean -->
+    <context:component-scan base-package="com.restaurant.dinner"/><!-- 默认扫描 com.restaurant.dinner 全部包，可以扫描到所引用模块的类 -->
+
+    <!-- 任务线程池大小 -->
+    <task:scheduler id="defaultScheduler" pool-size="20"/><!-- 根据实际任务数量配置线程池大小 -->
+    <!-- 自动扫描 @Scheduled 注解，注入定时任务 -->
+    <task:annotation-driven scheduler="defaultScheduler" />
+
+    <!-- 配置默认的Servlet Handler -->
+    <mvc:default-servlet-handler />
+    <mvc:annotation-driven/>
+
+    <!-- 业务接口安全过滤器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+
+            <bean class="${global.interceptor.api.security}"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- fastjson替换jackson -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/html;charset=UTF-8</value><!-- 设置输出数据的编码格式 -->
+                        <value>application/json</value><!-- META类型 -->
+                    </list>
+                </property>
+                <property name="features"><!--fastjson特性-->
+                    <array>
+                        <value>WriteMapNullValue</value><!--设置null值也要输出，fastjson默认是关闭的-->
+                        <value>WriteDateUseDateFormat</value><!--设置使用文本方式输出日期，fastjson默认是long-->
+                    </array>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--
+    配置文件上传
+    相关组件包（详见pom.xml）：
+    commons-fileupload.jar
+    commons-io.jar
+    commons-codec.jar
+    -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!-- 默认编码 -->
+        <property name="defaultEncoding" value="utf-8" />
+        <!-- 文件大小最大值 -->
+        <property name="maxUploadSize" value="10485760000" />
+        <!-- 内存中的最大值 -->
+        <property name="maxInMemorySize" value="40960" />
+    </bean>
+
+    <bean id="applicationCloseListener" class="${global.interceptor.app.close}"></bean>
+
+</beans>
