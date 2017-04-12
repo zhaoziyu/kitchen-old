@@ -1,6 +1,6 @@
 package com.restaurant.dinner.provider.service.impl.demo;
 
-import com.kitchen.rpc.server.RpcService;
+import com.kitchen.rpc.common.RpcService;
 import com.restaurant.dinner.api.pojo.vo.demo.DemoPerson;
 import com.restaurant.dinner.api.recipe.demo.DemoService;
 

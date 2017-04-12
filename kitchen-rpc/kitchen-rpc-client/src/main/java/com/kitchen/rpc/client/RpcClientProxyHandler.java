@@ -63,20 +63,19 @@ public class RpcClientProxyHandler implements InvocationHandler {
             request.setParameters(args);
 
             // 获取Http请求对象
+            // String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
             HttpServletRequest httpServletRequest = null;
             try {
                 httpServletRequest = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
             } catch (Exception e) {
-                //e.printStackTrace();
+                // 非HTTP环境的请求，无需处理
             }
-
             if (httpServletRequest != null) {
                 String ip = httpServletRequest.getRemoteAddr();// 获取请求IP
                 request.setRequestIp(ip);
 
                 String sessionId = httpServletRequest.getRequestedSessionId();// 获取请求会话
                 request.setRequestSessionId(sessionId);
-                //String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
             }
 
             // 从连接池获取连接

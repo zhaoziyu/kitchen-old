@@ -10,7 +10,7 @@ public class RpcClientConfig {
     /**
      * 连接通道池最大连接数
      *
-     * 定义了每个RPC服务接口的最大并发数（一个RPC服务接口对应一个FixedChannelPool连接池）
+     * 定义了每个RPC服务提供者的最大并发数（一个RPC服务提供者对应一个FixedChannelPool连接池）
      */
     public final static int CHANNEL_POOL_MAX_CONNECTIONS = 10240;
 

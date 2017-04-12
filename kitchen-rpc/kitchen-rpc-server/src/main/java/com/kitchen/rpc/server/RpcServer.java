@@ -1,5 +1,6 @@
 package com.kitchen.rpc.server;
 
+import com.kitchen.rpc.common.RpcService;
 import com.kitchen.rpc.common.codec.RpcDecoder;
 import com.kitchen.rpc.common.codec.RpcEncoder;
 import com.kitchen.rpc.common.protocol.RpcRequest;
@@ -30,7 +31,7 @@ import java.util.Map;
  * RPC 服务器（用于发布 RPC 服务）
  * 单例模式
  *
- * 调用顺序：
+ * 执行顺序：
  * 1、RpcServer()
  * 2、setApplicationContext()
  * 3、afterPropertiesSet()

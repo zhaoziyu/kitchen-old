@@ -40,9 +40,14 @@
     更多内容可参考“关于跨域访问.md”中的说明
     -->
     <mvc:cors>
-        <!--指定白名单和缓存时间（秒）-->
-        <!--<mvc:mapping path="/**" allowed-origins="http://127.0.0.1:8088,http://localhost:8088" max-age="3600" />-->
-        <!--全部可访问-->
+        <!--
+        指定白名单和缓存时间（秒）
+        <mvc:mapping path="/**" allowed-origins="http://127.0.0.1:8088,http://localhost:8088" max-age="3600" />
+        -->
+        <!--
+        全部可访问
+        <mvc:mapping path="/**" />
+        -->
         <mvc:mapping path="/**" allowed-origins="http://127.0.0.1:8088,http://localhost:8088" max-age="3600" />
     </mvc:cors>
 

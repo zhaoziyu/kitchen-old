@@ -20,6 +20,7 @@
         <module>web-business</module>
         <module>kitchen-cache</module>
         <module>kitchen-rpc</module>
+        <module>kitchen-request-sdk</module>
     </modules>
 
     <!-- 通用属性配置 -->

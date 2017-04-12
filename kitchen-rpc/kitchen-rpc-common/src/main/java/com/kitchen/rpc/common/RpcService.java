@@ -1,4 +1,4 @@
-package com.kitchen.rpc.server;
+package com.kitchen.rpc.common;
 
 import org.springframework.stereotype.Component;
 
