@@ -103,7 +103,7 @@ public class ClientChannelCache {
             return;
         }
         InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
-        String serviceAddress = remoteAddress.getHostName() + ":" + remoteAddress.getPort();
+        String serviceAddress = remoteAddress.getAddress().getHostAddress() + ":" + remoteAddress.getPort();
 
         FixedChannelPool channelPool = channelPoolMap.get(serviceAddress);
 

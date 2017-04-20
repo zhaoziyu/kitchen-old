@@ -10,9 +10,13 @@ import com.kitchen.rpc.registry.RpcServiceRegistry;
 import com.kitchen.rpc.registry.cache.RegistryCache;
 import com.kitchen.rpc.registry.zookeeper.registry.ZooKeeperServiceRegistry;
 import com.kitchen.rpc.server.config.RpcServerConfig;
+import com.kitchen.rpc.server.exception.ProviderDeployException;
 import com.kitchen.rpc.server.exception.RpcServiceException;
 import com.kitchen.rpc.server.thread.BusinessThread;
 import com.kitchen.rpc.server.util.RpcServerUtil;
+import com.kitchen.rpc.server.deploy.ServerDeployFetcherFactory;
+import com.kitchen.rpc.server.deploy.host.HostFetcher;
+import com.kitchen.rpc.server.deploy.port.PortFetcher;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -25,6 +29,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import java.net.BindException;
+import java.net.InetSocketAddress;
 import java.util.Map;
 
 /**
@@ -43,14 +49,13 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
     // Spring上下文
     public static ClassPathXmlApplicationContext APPLICATION_CONTEXT;
 
+    // 是否开启RPC服务
     private static boolean OPEN_RPC = true;
 
-    /**
-     * 当前服务提供者的服务器地址 [ip:port]
-     * 通过Spring配置文件初始化
-     */
-    private String serverAddress;
+    // 服务端地址[ip:port]
+    private InetSocketAddress localAddress;
 
+    // 服务端权重
     private Integer serverWeight;
 
     /**
@@ -59,17 +64,43 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
      */
     private static RpcServiceRegistry rpcServiceRegistry;
 
+    // Netty通道启动后的返回结果
     private static ChannelFuture future = null;
+
+    // Netty处理线程
     private static EventLoopGroup bossGroup = null;
     private static EventLoopGroup workerGroup = null;
 
-    public RpcServer(String serverAddress, Integer serverWeight, String registryCenterAddress, boolean open) {
+    public RpcServer(String serverHostType, String serverHost, String serverPortType, Integer serverPort, Integer serverWeight, String registryCenterAddress, boolean open) {
         OPEN_RPC = open;
         if (OPEN_RPC) {
-            this.serverAddress = serverAddress;
+            // 初始化宿主主机的Host和Port
+            HostFetcher hostFetcher = ServerDeployFetcherFactory.createHostFetcher(serverHostType);
+            String ip = null;
+            try {
+                ip = hostFetcher.getIp(serverHost);
+            } catch (ProviderDeployException e) {
+                e.printStackTrace();
+                // 服务退出
+                shutdownService();
+            }
+            PortFetcher portFetcher = ServerDeployFetcherFactory.createPortFetcher(serverPortType);
+            Integer port = null;
+            try {
+                port = portFetcher.getPort(serverPort);
+            } catch (ProviderDeployException e) {
+                e.printStackTrace();
+                // 服务退出
+                shutdownService();
+            }
+            localAddress = new InetSocketAddress(ip, port);
+            String serverAddress = ip + ":" + port;
+            RegistryCache.address(serverAddress);
+
+            // 保存服务的权重
             this.serverWeight = serverWeight;
-            RegistryCache.address(this.serverAddress);
             RegistryCache.weight(this.serverWeight);
+
             // 初始化ZooKeeper目录服务 TODO 注册和发现通过抽象工厂实现
             rpcServiceRegistry = new ZooKeeperServiceRegistry(registryCenterAddress);
         } else {
@@ -151,13 +182,19 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
             bootstrap.option(ChannelOption.TCP_NODELAY, true);//通过NoDelay禁用Nagle,使消息立即发出去，不用等待到一定的数据量才发出去
             bootstrap.childOption(ChannelOption.SO_KEEPALIVE, true);//保持长连接状态
 
-            // 获取 RPC 服务器的 IP 地址与端口号
-            String host = RpcStringUtil.getHost(serverAddress);
-            int port = RpcStringUtil.getPort(serverAddress);
+            // 设置RPC服务地址[ip:port]
+            bootstrap.localAddress(localAddress);
 
             // 启动 RPC 服务器
-            future = bootstrap.bind(host, port).sync();
-            System.out.println("服务提供者(" + serverAddress + ")已启动完毕");
+            try {
+                future = bootstrap.bind().sync();
+            } catch (Exception e) {
+                if (e instanceof BindException) {
+                    System.err.println("初始化异常：服务地址绑定失败");
+                    shutdownService();
+                }
+            }
+            System.out.println("服务提供者(" + localAddress.getAddress().toString() + ")已启动完毕");
 
             // 注册 RPC 服务地址到ZooKeeper服务器
             RegistryCache.registryCacheService(rpcServiceRegistry);
@@ -165,6 +202,11 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
             // 等待...直到关闭
             future.channel().closeFuture().sync();
         }
+    }
+
+    private static void shutdownService() {
+        System.err.println("服务退出......");
+        Runtime.getRuntime().exit(500);
     }
 
     /**
@@ -189,9 +231,11 @@ public class RpcServer implements ApplicationContextAware, InitializingBean {
 
             // 关闭业务线程池
             BusinessThread.shutdown();
-            System.out.println("RPC 服务器：已关闭");
+            System.out.println("RPC服务器：已关闭");
         }
         // 关闭Spring上下文
-        APPLICATION_CONTEXT.destroy();
+        if (APPLICATION_CONTEXT != null) {
+            APPLICATION_CONTEXT.destroy();
+        }
     }
 }

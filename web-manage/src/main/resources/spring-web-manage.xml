@@ -30,6 +30,7 @@
                 <value>classpath*:conf/properties/db-config.properties</value>
             </list>
         </property>
+        <property name="fileEncoding" value="UTF-8"></property>
     </bean>
 
     <!-- 导入core-business模块Spring配置文件 在propertyConfigurer中需要导入db-config.properties -->

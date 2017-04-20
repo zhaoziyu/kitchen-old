@@ -41,7 +41,7 @@ public class TestAsyncCallbackRequest {
             }
         });
         DemoPerson demoPerson = new DemoPerson();
-        demoPerson.setName("赵子彧");
+        demoPerson.setName("赵梓彧");
         demoPerson.setPhone("18805310950");
         String result = helloService3.sayHello(demoPerson);
 

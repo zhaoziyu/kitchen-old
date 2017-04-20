@@ -32,7 +32,7 @@ public class JedisPoolTest {
 
     @Test()
     public void _1_setTest(){
-        jedisPool.getResource().set("kitchen", "Copyright 赵子彧");
+        jedisPool.getResource().set("kitchen", "Copyright 赵梓彧");
     }
 
     @Test

@@ -32,7 +32,12 @@
 
     <!-- 启动Rpc服务端 -->
     <bean id="rpcServer" class="com.kitchen.rpc.server.RpcServer" scope="singleton" lazy-init="false">
-        <constructor-arg name="serverAddress" value="${rpc.provider.address}"/><!--设置服务提供者（服务器）的地址-->
+        <!--设置服务提供者（服务器）的部署信息-->
+        <constructor-arg name="serverHostType" value="${rpc.provider.host.type}"/><!--IP获取类型-->
+        <constructor-arg name="serverHost" value="${rpc.provider.host}"/><!--指定IP内容-->
+        <constructor-arg name="serverPortType" value="${rpc.provider.port.type}"/><!--端口获取类型-->
+        <constructor-arg name="serverPort" value="${rpc.provider.port}"/><!--指定端口内容-->
+
         <constructor-arg name="serverWeight" value="${rpc.provider.weight}"/><!--设置服务提供者（服务器）的权重-->
         <constructor-arg name="registryCenterAddress" value="${rpc.registry.address}"/><!--注册中心地址-->
         <constructor-arg name="open" value="${rpc.provider.open}"/><!-- 是否开启Rpc服务 -->

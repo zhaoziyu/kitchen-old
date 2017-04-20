@@ -120,7 +120,7 @@
 
         <div class="footer">
             <div class="pull-right">
-                Copyright © 2016 - 2017 &nbsp;&nbsp;<a href="#">赵子彧</a>
+                Copyright © 2016 - 2017 &nbsp;&nbsp;<a href="#">赵梓彧</a>
             </div>
         </div>
     </div>

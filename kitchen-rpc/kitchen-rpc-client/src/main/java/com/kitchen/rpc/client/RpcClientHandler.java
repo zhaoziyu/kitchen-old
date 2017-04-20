@@ -24,7 +24,7 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
 
     public RpcClientFuture sendRequest(Channel channel, RpcRequest request) {
         InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
-        String serviceAddress = remoteAddress.getHostName() + ":" + remoteAddress.getPort();
+        String serviceAddress = remoteAddress.getAddress().getHostAddress() + ":" + remoteAddress.getPort();
 
         RpcClientFuture rpcFuture = new RpcClientFuture(request, serviceAddress);
 
@@ -36,7 +36,7 @@ public class RpcClientHandler extends SimpleChannelInboundHandler<RpcResponse> {
 
     public void sendRequest(Channel channel, RpcRequest request, List<RpcClientCallback> callbackList) {
         InetSocketAddress remoteAddress = (InetSocketAddress) channel.remoteAddress();
-        String serviceAddress = remoteAddress.getHostName() + ":" + remoteAddress.getPort();
+        String serviceAddress = remoteAddress.getAddress().getHostAddress() + ":" + remoteAddress.getPort();
 
         RpcClientFuture rpcFuture = new RpcClientFuture(request, serviceAddress);
         if (callbackList != null && callbackList.size() > 0) {

@@ -5,6 +5,7 @@ import com.restaurant.dinner.api.pojo.vo.demo.DemoPerson;
 import com.restaurant.dinner.api.recipe.demo.DemoService;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * Demo
@@ -20,6 +21,7 @@ public class DemoServiceRpcImpl implements DemoService {
 
     @Override
     public DemoPerson getDemoPerson(int userId) {
+        System.out.println("业务处理中 " + new Date());
         return demoService.getDemoPerson(userId);
     }
 }

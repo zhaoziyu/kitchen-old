@@ -9,6 +9,20 @@ package com.kitchen.rpc.server.config;
 public class RpcServerConfig {
 
     /**
+     * 默认的RPC服务端口号
+     *
+     * 当未在rpc-provider.properties中指定rpc.provider.port.type参数为default时，使用此端口号提供服务
+     */
+    public static int DEFAULT_PORT = 8999;
+
+    /**
+     * 默认的RPC服务IP地址
+     *
+     * 当未在rpc-provider.properties中指定rpc.provider.host.type参数为default时，使用此IP提供服务
+     */
+    public static String DEFAULT_HOST = "127.0.0.1";
+
+    /**
      * backlog：TCP参数
      * 内核为此套接口排队的最大连接个数
      * TCP未连接队列和已连接队列总和的最大值，需要根据实际场景和网络状况进行灵活设置
