@@ -5,6 +5,7 @@ import com.kitchen.rpc.registry.RpcServiceDiscovery;
 import com.kitchen.rpc.registry.cache.DiscoveryCache;
 import com.kitchen.rpc.registry.zookeeper.ZooKeeperConfig;
 import org.apache.curator.RetryPolicy;
+import org.apache.curator.retry.RetryNTimes;
 import org.apache.curator.retry.RetryUntilElapsed;
 
 import java.util.*;
@@ -51,8 +52,8 @@ public class ZooKeeperServiceDiscovery implements RpcServiceDiscovery {
         System.out.println("连接ZooKeeper目录服务器中......");
 
         // 创建 ZooKeeper 客户端
-        RetryPolicy retryPolicy = new RetryUntilElapsed(1000 * 60 * 10, 1000); // 尝试重连10分钟，每秒一次
-        //RetryPolicy retryPolicy = new RetryNTimes(Integer.MAX_VALUE, 1000); // 尝试无限次重连，每一秒尝试一次
+        //RetryPolicy retryPolicy = new RetryUntilElapsed(1000 * 60 * 10, 1000); // 尝试重连10分钟，每秒一次
+        RetryPolicy retryPolicy = new RetryNTimes(Integer.MAX_VALUE, 5000); // 尝试无限次重连，每5秒尝试一次
         DiscoveryCurator.connectionZooKeeperServer(zkAddress, retryPolicy);
 
         DiscoveryConnectionStateListener connectionStateListener = new DiscoveryConnectionStateListener();
