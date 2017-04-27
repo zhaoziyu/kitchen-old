@@ -92,6 +92,15 @@
             KebabCase	person-id
         -->
         <property name="propertyNamingStrategy" value="SnakeCase" />
+        <!-- SerializerFeature -->
+        <property name="serializerFeatures">
+            <list>
+                <value>WriteNullListAsEmpty</value><!--将Collection类型字段的字段空值输出为[]-->
+                <!--<value>WriteNullStringAsEmpty</value>将字符串类型字段的空值输出为空字符串 ""-->
+                <!--<value>WriteNullNumberAsZero</value>将数值类型字段的空值输出为0-->
+                <!--<value>WriteNullBooleanAsFalse</value>将Boolean类型字段的空值输出为false-->
+            </list>
+        </property>
     </bean>
     <mvc:annotation-driven>
         <mvc:message-converters>
