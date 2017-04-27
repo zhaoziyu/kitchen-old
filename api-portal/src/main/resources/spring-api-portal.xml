@@ -78,22 +78,30 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
-    <!-- fastjson替换jackson -->
+    <!-- FastJson -->
+    <bean id="fastJsonConfig" class="com.restaurant.dinner.protal.config.FastJsonSerializeConfig">
+        <!-- Default charset -->
+        <property name="charset" value="UTF-8" />
+        <!-- Default dateFormat -->
+        <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss" />
+        <!--
+            设置属性字段的JSON序列化和解析格式
+            CamelCase	persionId
+            PascalCase	PersonId
+            SnakeCase	person_id
+            KebabCase	person-id
+        -->
+        <property name="propertyNamingStrategy" value="SnakeCase" />
+    </bean>
     <mvc:annotation-driven>
-        <mvc:message-converters register-defaults="true">
-            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+        <mvc:message-converters>
+            <bean class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4">
                 <property name="supportedMediaTypes">
                     <list>
-                        <value>text/html;charset=UTF-8</value><!-- 设置输出数据的编码格式 -->
-                        <value>application/json</value><!-- META类型 -->
+                        <value>application/json</value>
                     </list>
                 </property>
-                <property name="features"><!--fastjson特性-->
-                    <array>
-                        <value>WriteMapNullValue</value><!--设置null值也要输出，fastjson默认是关闭的-->
-                        <value>WriteDateUseDateFormat</value><!--设置使用文本方式输出日期，fastjson默认是long-->
-                    </array>
-                </property>
+                <property name="fastJsonConfig" ref="fastJsonConfig" />
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>

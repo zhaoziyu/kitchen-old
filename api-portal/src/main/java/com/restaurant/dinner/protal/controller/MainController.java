@@ -1,6 +1,6 @@
 package com.restaurant.dinner.protal.controller;
 
-import com.restaurant.dinner.api.pojo.vo.JsonVo;
+import com.restaurant.dinner.api.pojo.vo.JsonObjectVo;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +20,8 @@ public class MainController {
 
     @RequestMapping("/")
     @ResponseBody
-    public JsonVo<String> main(ModelMap map, HttpSession httpSession) {
-        JsonVo<String> result = new JsonVo<>();
+    public JsonObjectVo<String> main(ModelMap map, HttpSession httpSession) {
+        JsonObjectVo<String> result = new JsonObjectVo<>();
         result.setSuccess(true);
         result.setMsg("调用成功");
         result.setData("欢迎访问微服务接口");

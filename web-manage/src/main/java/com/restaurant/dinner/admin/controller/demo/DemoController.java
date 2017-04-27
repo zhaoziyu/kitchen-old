@@ -1,6 +1,6 @@
 package com.restaurant.dinner.admin.controller.demo;
 
-import com.restaurant.dinner.api.pojo.vo.JsonVo;
+import com.restaurant.dinner.api.pojo.vo.JsonObjectVo;
 import com.restaurant.dinner.api.pojo.vo.demo.DemoPerson;
 import com.restaurant.dinner.api.recipe.demo.DemoService;
 import com.restaurant.dinner.market.common.time.KitTimeFormatter;
@@ -27,21 +27,21 @@ public class DemoController {
 
     @RequestMapping("/getDemoInfo")
     @ResponseBody
-    public JsonVo<DemoPerson> getDemoInfo(HttpServletRequest request, HttpSession httpSession) {
-        JsonVo<DemoPerson> jsonVo = new JsonVo<>();
+    public JsonObjectVo<DemoPerson> getDemoInfo(HttpServletRequest request, HttpSession httpSession) {
+        JsonObjectVo<DemoPerson> jsonObjectVo = new JsonObjectVo<>();
 
         DemoPerson demoPerson = demoService.getDemoPerson(1);
 
-        jsonVo.setSuccess(false);
-        jsonVo.setMsg("Hello World！");
-        jsonVo.setData(demoPerson);
+        jsonObjectVo.setSuccess(false);
+        jsonObjectVo.setMsg("Hello World！");
+        jsonObjectVo.setData(demoPerson);
 
-        return jsonVo;
+        return jsonObjectVo;
     }
 
     @RequestMapping("/testConcurrence")
     @ResponseBody
-    public JsonVo<String> testConcurrence(HttpServletRequest request, String user_id) {
+    public JsonObjectVo<String> testConcurrence(HttpServletRequest request, String user_id) {
         System.out.println(user_id + "调用testConcurrence请求");
         synchronized (user_id) {
             System.out.println(user_id + "开始执行testConcurrence请求");
@@ -52,11 +52,11 @@ public class DemoController {
                 e.printStackTrace();
             }
             String endTime = KitTimeFormatter.formatNowToCommonDateTimeMs();
-            JsonVo<String> jsonVo = new JsonVo<>();
-            jsonVo.setSuccess(true);
-            jsonVo.setMsg("start:" + startTime);
-            jsonVo.setData("end:" + endTime);
-            return jsonVo;
+            JsonObjectVo<String> jsonObjectVo = new JsonObjectVo<>();
+            jsonObjectVo.setSuccess(true);
+            jsonObjectVo.setMsg("start:" + startTime);
+            jsonObjectVo.setData("end:" + endTime);
+            return jsonObjectVo;
         }
     }
 

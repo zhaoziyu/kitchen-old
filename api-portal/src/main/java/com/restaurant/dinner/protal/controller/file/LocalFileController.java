@@ -1,6 +1,6 @@
 package com.restaurant.dinner.protal.controller.file;
 
-import com.restaurant.dinner.api.pojo.vo.JsonVo;
+import com.restaurant.dinner.api.pojo.vo.JsonObjectVo;
 import com.restaurant.dinner.market.common.file.KitFileHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +27,7 @@ public class LocalFileController {
 
     @RequestMapping(value = "/uploadSingle", method = RequestMethod.POST)
     @ResponseBody
-    public JsonVo<Map<String, String>> uploadSingle(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) {
+    public JsonObjectVo<Map<String, String>> uploadSingle(HttpServletRequest request, @RequestParam(value = "file", required = false) MultipartFile file) {
         String folder = request.getParameter("folder");     //要上传到的子文件夹，若不传，则上传至upload根目录
         String control = request.getParameter("control");   //上传控件的id，将原样返回给前端
 
@@ -46,7 +46,7 @@ public class LocalFileController {
         resultMap.put("control", control);
         resultMap.put("imageUri", uploadedUri);
 
-        JsonVo<Map<String, String>> result = new JsonVo<>();
+        JsonObjectVo<Map<String, String>> result = new JsonObjectVo<>();
         result.setSuccess(success);
         result.setMsg(msg);
         result.setData(resultMap);
@@ -56,7 +56,7 @@ public class LocalFileController {
 
     @RequestMapping(value = "/uploadMulti", method = RequestMethod.POST)
     @ResponseBody
-    public JsonVo<Map<String, Object>> uploadMulti(@RequestParam(value = "files", required = false) MultipartFile[] files, HttpServletRequest request) {
+    public JsonObjectVo<Map<String, Object>> uploadMulti(@RequestParam(value = "files", required = false) MultipartFile[] files, HttpServletRequest request) {
         String folder = request.getParameter("folder");     //要上传到的子文件夹，若不传，则上传至upload根目录
         String control = request.getParameter("control");  //上传的控件（id或name），将原样返回给前端
 
@@ -87,7 +87,7 @@ public class LocalFileController {
         resultMap.put("control", control);
         resultMap.put("imageUriList", uploadedUri);
 
-        JsonVo<Map<String, Object>> result = new JsonVo<>();
+        JsonObjectVo<Map<String, Object>> result = new JsonObjectVo<>();
         result.setSuccess(success);
         result.setMsg(msg);
         result.setData(resultMap);

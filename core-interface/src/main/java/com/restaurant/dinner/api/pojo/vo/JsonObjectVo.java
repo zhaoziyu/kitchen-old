@@ -5,19 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 视图层返回json格式对象的容器类（即Controller中接口的返回类型均为JsonVo对象）
+ * 视图层返回json格式对象的容器类（即Controller中接口的返回类型）
  * 所有通过json进行返回数据的对象均需要放到此类的result属性中
  *
  * @date 2016-09-04
  * @author 赵梓彧 - kitchen_dev@163.com
  */
-public class JsonVo<T extends Object> implements Serializable {
-
+public class JsonObjectVo<T extends Object> implements Serializable {
     /**
      * 序列化标识
      */
     private static final long serialVersionUID = 8141800867521702858L;
-
     /**
      * 执行的结果
      * true：执行成功
@@ -26,18 +24,24 @@ public class JsonVo<T extends Object> implements Serializable {
     private boolean success;
 
     /**
-     * 执行结果的说明
+     * 接口返回码
+     */
+    private String code;
+
+    /**
+     * 接口返回码说明
      */
     private String msg;
 
     /**
-     * 错误消息集合
-     *
-     * tips：
-     * #可用于 输入信息的验证，返回每个输入错误的消息
-     * #可用于 错误代码和代码对应的描述
+     * 业务返回码
      */
-    private Map<String, String> errors = new HashMap<String, String>();
+    private String bizCode;
+
+    /**
+     * 业务返回码说明
+     */
+    private String bizMsg;
 
     /**
      * 返回的数据
@@ -47,12 +51,22 @@ public class JsonVo<T extends Object> implements Serializable {
      */
     private T data;
 
+
+
     public boolean isSuccess() {
         return success;
     }
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getMsg() {
@@ -63,12 +77,20 @@ public class JsonVo<T extends Object> implements Serializable {
         this.msg = msg;
     }
 
-    public Map<String, String> getErrors() {
-        return errors;
+    public String getBizCode() {
+        return bizCode;
     }
 
-    public void setErrors(Map<String, String> errors) {
-        this.errors = errors;
+    public void setBizCode(String bizCode) {
+        this.bizCode = bizCode;
+    }
+
+    public String getBizMsg() {
+        return bizMsg;
+    }
+
+    public void setBizMsg(String bizMsg) {
+        this.bizMsg = bizMsg;
     }
 
     public T getData() {

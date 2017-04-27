@@ -1,7 +1,7 @@
 package com.restaurant.dinner.protal.controller.demo;
 
 import com.kitchen.rpc.client.RpcClientProxy;
-import com.restaurant.dinner.api.pojo.vo.JsonVo;
+import com.restaurant.dinner.api.pojo.vo.JsonObjectVo;
 import com.restaurant.dinner.api.pojo.vo.demo.DemoPerson;
 import com.restaurant.dinner.api.recipe.demo.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,31 +27,31 @@ public class DemoController {
 
     @RequestMapping("/getDemoInfo")
     @ResponseBody
-    public JsonVo<DemoPerson> getDemoInfo(HttpServletRequest request, HttpSession httpSession) {
-        JsonVo<DemoPerson> jsonVo = new JsonVo<>();
+    public JsonObjectVo<DemoPerson> getDemoInfo(HttpServletRequest request, HttpSession httpSession) {
+        JsonObjectVo<DemoPerson> jsonObjectVo = new JsonObjectVo<>();
 
         DemoPerson demoPerson = demoService.getDemoPerson(1);
 
-        jsonVo.setSuccess(true);
-        jsonVo.setMsg("Hello World！");
-        jsonVo.setData(demoPerson);
+        jsonObjectVo.setSuccess(true);
+        jsonObjectVo.setMsg("Hello World！");
+        jsonObjectVo.setData(demoPerson);
 
-        return jsonVo;
+        return jsonObjectVo;
     }
 
     @RequestMapping("/getRpcDemoInfo")
     @ResponseBody
-    public JsonVo<DemoPerson> getRpcDemoInfo(HttpServletRequest request, HttpSession httpSession) {
-        JsonVo<DemoPerson> jsonVo = new JsonVo<>();
+    public JsonObjectVo<DemoPerson> getRpcDemoInfo(HttpServletRequest request, HttpSession httpSession) {
+        JsonObjectVo<DemoPerson> jsonObjectVo = new JsonObjectVo<>();
 
         DemoService rpcDemoService = RpcClientProxy.createSync(DemoService.class);
         DemoPerson demoPerson = rpcDemoService.getDemoPerson(1);
 
-        jsonVo.setSuccess(true);
-        jsonVo.setMsg("Hello World！");
-        jsonVo.setData(demoPerson);
+        jsonObjectVo.setSuccess(true);
+        jsonObjectVo.setMsg("Hello World！");
+        jsonObjectVo.setData(demoPerson);
 
-        return jsonVo;
+        return jsonObjectVo;
     }
 
     /**
@@ -62,13 +62,13 @@ public class DemoController {
      */
     @RequestMapping("/testLoadBalance")
     @ResponseBody
-    public JsonVo<Object> testLoadBalance(HttpServletRequest request, HttpSession httpSession) {
-        JsonVo<Object> jsonVo = new JsonVo<>();
+    public JsonObjectVo<Object> testLoadBalance(HttpServletRequest request, HttpSession httpSession) {
+        JsonObjectVo<Object> jsonObjectVo = new JsonObjectVo<>();
 
-        jsonVo.setSuccess(true);
-        jsonVo.setMsg("IP：" + request.getRemoteAddr() + " Session：" + request.getRequestedSessionId());
-        jsonVo.setData(null);
+        jsonObjectVo.setSuccess(true);
+        jsonObjectVo.setMsg("IP：" + request.getRemoteAddr() + " Session：" + request.getRequestedSessionId());
+        jsonObjectVo.setData(null);
 
-        return jsonVo;
+        return jsonObjectVo;
     }
 }

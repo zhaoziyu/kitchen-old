@@ -1,6 +1,6 @@
 package com.restaurant.dinner.protal.controller;
 
-import com.restaurant.dinner.api.pojo.vo.JsonVo;
+import com.restaurant.dinner.api.pojo.vo.JsonObjectVo;
 import com.restaurant.dinner.protal.ProjectConstant;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +21,9 @@ public class ErrorController {
 
     @RequestMapping("/handlerByCode")
     @ResponseBody
-    public JsonVo<Object> handlerByCode(HttpServletRequest request, HttpSession httpSession) {
-        JsonVo<Object> jsonVo = new JsonVo<>();
-        jsonVo.setSuccess(false);
+    public JsonObjectVo<Object> handlerByCode(HttpServletRequest request, HttpSession httpSession) {
+        JsonObjectVo<Object> jsonObjectVo = new JsonObjectVo<>();
+        jsonObjectVo.setSuccess(false);
 
         String errorCode = request.getParameter("code");
         String errorMsg = "";
@@ -40,8 +40,8 @@ public class ErrorController {
                 errorMsg = "Project Constant 未配置相关异常处理器";
             }
         }
-        jsonVo.setMsg(errorMsg);
+        jsonObjectVo.setMsg(errorMsg);
 
-        return jsonVo;
+        return jsonObjectVo;
     }
 }
